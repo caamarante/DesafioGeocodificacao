@@ -16,3 +16,13 @@ function simplificarTexto(texto) {
         .replace(/[^a-z0-9]/g, '') // Remove pontuação e espaços
         .trim();
 }
+
+async function executarGeocodificacao() {
+    const all = (query) => new Promise((res, rej) => db.all(query, (err, rows) => err ? rej(err) : res(rows)));
+    const run = (query) => new Promise((res, rej) => db.run(query, (err) => err ? rej(err) : res()));
+    
+    try {
+        await run(`CREATE TABLE busca AS SELECT * FROM read_csv_auto('${PATH_BUSCA}', delim=';', header=True, all_varchar=True)`);
+        const colunasOriginal = (await all(`PRAGMA table_info('busca')`)).map(c => c.name);
+    }
+}
