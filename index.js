@@ -73,6 +73,12 @@ async function executarGeocodificacao() {
                     statusVinculacao = `AMBÍGUO (${candidatosNoMesmoCep.length} registros)`;
                 }
             }
+            
+             return {
+                ...linhaBusca,
+                setor_censitario_encontrado: melhorSetor,
+                status_vinculacao: statusVinculacao
+            };
         });
         
     }
