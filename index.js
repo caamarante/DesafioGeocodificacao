@@ -108,5 +108,7 @@ async function executarGeocodificacao() {
         console.log(`Dados NÃO LOCALIZADOS: ${totalNaoEncontrados}`);
         console.log(`Arquivo final salvo em: ${PATH_SAIDA_FINAL}`);
     
+    } catch (error) {
+        console.error('Erro durante a execução:', error);
     }
 }
