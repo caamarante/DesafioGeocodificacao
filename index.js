@@ -48,6 +48,18 @@ async function executarGeocodificacao() {
             const ruaBuscaSimplificada = simplificarTexto(linhaBusca.consulta_logradouro);
 
             const candidatosNoMesmoCep = cnefeMap.filter(c => c.cep_limpo === cepBusca && c.mun6 === munBusca);
+        
+            let melhorSetor = null;
+            let statusVinculacao = 'NÃO LOCALIZADO';
+
+            if (candidatosNoMesmoCep.length > 0) {
+                let matchCandidato = candidatosNoMesmoCep.find(c => {
+                    const ruaCnefeSimplificada = simplificarTexto(c.NOM_SEGLOGR);
+                    return ruaCnefeSimplificada === ruaBuscaSimplificada || 
+                           ruaCnefeSimplificada.includes(ruaBuscaSimplificada) || 
+                           ruaBuscaSimplificada.includes(ruaCnefeSimplificada);
+                });
+            }
         });
         
     }
