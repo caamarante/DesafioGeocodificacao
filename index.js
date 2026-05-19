@@ -42,5 +42,13 @@ async function executarGeocodificacao() {
             FROM busca
         `);
         
+        const resultadoFinal = linhasBusca.map(linhaBusca => {
+            const cepBusca = (linhaBusca.consulta_cep || '').replace(/[^0-9]/g, '');
+            const munBusca = String(linhaBusca.consulta_municipio || '').substring(0, 6);
+            const ruaBuscaSimplificada = simplificarTexto(linhaBusca.consulta_logradouro);
+
+            const candidatosNoMesmoCep = cnefeMap.filter(c => c.cep_limpo === cepBusca && c.mun6 === munBusca);
+        });
+        
     }
 }
