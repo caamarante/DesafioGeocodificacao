@@ -24,5 +24,18 @@ async function executarGeocodificacao() {
     try {
         await run(`CREATE TABLE busca AS SELECT * FROM read_csv_auto('${PATH_BUSCA}', delim=';', header=True, all_varchar=True)`);
         const colunasOriginal = (await all(`PRAGMA table_info('busca')`)).map(c => c.name);
+        
+        console.log('Carregando CNEFE...');
+
+        const cnefeMap = await all(`
+            SELECT 
+                SUBSTR(CAST(COD_MUNICIPIO AS VARCHAR), 1, 6) as mun6,
+                REGEXP_REPLACE(CAST(CEP AS VARCHAR), '[^0-9]', '', 'g') as cep_limpo,
+                NOM_SEGLOGR,
+                CAST(COD_SETOR AS VARCHAR) as COD_SETOR
+            FROM read_csv_auto('${PATH_DADOS_CNEFE}', delim=';', header=True, all_varchar=True)
+            GROUP BY mun6, cep_limpo, NOM_SEGLOGR, COD_SETOR
+        `);
+        
     }
 }
