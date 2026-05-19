@@ -42,6 +42,8 @@ async function executarGeocodificacao() {
             FROM busca
         `);
         
+        console.log('Processando inteligência Fuzzy e contando registros...');
+
         const resultadoFinal = linhasBusca.map(linhaBusca => {
             const cepBusca = (linhaBusca.consulta_cep || '').replace(/[^0-9]/g, '');
             const munBusca = String(linhaBusca.consulta_municipio || '').substring(0, 6);
@@ -81,5 +83,19 @@ async function executarGeocodificacao() {
             };
         });
         
+        resultadoFinal.sort((a, b) => Number(a.id_linha_busca) - Number(b.id_linha_busca));
+        
+        console.log('Salvando arquivo final...');
+
+        const cabecalhoFinal = [...colunasOriginal, 'setor_censitario_encontrado', 'status_vinculacao'];
+        const linhasCSV = resultadoFinal.map(row => {
+            return cabecalhoFinal.map(col => {
+                if (col === 'setor_censitario_encontrado') return row.setor_censitario_encontrado || 'NÃO ENCONTRADO';
+                if (col === 'status_vinculacao') return row.status_vinculacao;
+                return row[col] === null || row[col] === undefined ? '' : row[col];
+            }).join(';');
+        });
+
+        fs.writeFileSync(PATH_SAIDA_FINAL, [cabecalhoFinal.join(';'), ...linhasCSV].join('\n'));    
     }
 }
