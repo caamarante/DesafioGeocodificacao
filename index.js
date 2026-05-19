@@ -37,5 +37,10 @@ async function executarGeocodificacao() {
             GROUP BY mun6, cep_limpo, NOM_SEGLOGR, COD_SETOR
         `);
         
+        const linhasBusca = await all(`
+            SELECT *, ROW_NUMBER() OVER () as id_linha_busca 
+            FROM busca
+        `);
+        
     }
 }
