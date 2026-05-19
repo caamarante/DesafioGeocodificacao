@@ -112,3 +112,5 @@ async function executarGeocodificacao() {
         console.error('Erro durante a execução:', error);
     }
 }
+
+executarGeocodificacao();
