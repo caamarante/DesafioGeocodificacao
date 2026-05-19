@@ -59,6 +59,19 @@ async function executarGeocodificacao() {
                            ruaCnefeSimplificada.includes(ruaBuscaSimplificada) || 
                            ruaBuscaSimplificada.includes(ruaCnefeSimplificada);
                 });
+                                
+                if (!matchCandidato && candidatosNoMesmoCep.length === 1) {
+                    matchCandidato = candidatosNoMesmoCep[0];
+                }
+
+                if (matchCandidato) {
+                    melhorSetor = matchCandidato.COD_SETOR;
+                    statusVinculacao = 'LOCALIZADO';
+                } else {
+                    // Se não achou a rua mas o CEP existe, puxa o primeiro setor disponível e marca como ambíguo
+                    melhorSetor = candidatosNoMesmoCep[0].COD_SETOR;
+                    statusVinculacao = `AMBÍGUO (${candidatosNoMesmoCep.length} registros)`;
+                }
             }
         });
         
