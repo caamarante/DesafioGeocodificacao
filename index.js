@@ -97,5 +97,16 @@ async function executarGeocodificacao() {
         });
 
         fs.writeFileSync(PATH_SAIDA_FINAL, [cabecalhoFinal.join(';'), ...linhasCSV].join('\n'));    
+      
+        const totalLinhas = resultadoFinal.length;
+        const totalEncontrados = resultadoFinal.filter(row => row.setor_censitario_encontrado !== null).length;
+        const totalNaoEncontrados = totalLinhas - totalEncontrados;
+
+        console.log(`\n--- GEODECODIFICAÇÃO CONCLUÍDA ---`);
+        console.log(`Total de linhas processadas: ${totalLinhas}`);
+        console.log(`Dados localizados com sucesso: ${totalEncontrados} / ${totalLinhas}`);
+        console.log(`Dados NÃO LOCALIZADOS: ${totalNaoEncontrados}`);
+        console.log(`Arquivo final salvo em: ${PATH_SAIDA_FINAL}`);
+    
     }
 }
